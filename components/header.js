@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { categories, productImage, productTitle, quickLinks, searchProducts, STORE } from "@/lib/catalog";
+import { categories, productTitle, quickLinks, searchProducts, STORE } from "@/lib/catalog";
 import { useShop } from "@/components/shop-context";
-import { CartIcon, CloseIcon, MenuIcon } from "@/components/icons";
+import { CartIcon, CloseIcon, HeartIcon, MenuIcon } from "@/components/icons";
 
 function SearchForm({ className = "" }) {
   const router = useRouter();
@@ -107,7 +107,7 @@ function SearchForm({ className = "" }) {
                     }`}
                   >
                     <img
-                      src={productImage(product.image, 200)}
+                      src={product.image}
                       alt=""
                       className="h-12 w-12 shrink-0 rounded-lg bg-zinc-50 object-contain"
                     />
@@ -187,17 +187,20 @@ export default function Header() {
 
   return (
     <header className="relative z-40 bg-white">
-      <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-4 md:flex">
+      <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-0.5 px-4 py-4 md:flex">
         <button
           type="button"
-          className="rounded-full p-2 text-zinc-700 hover:bg-zinc-100 md:hidden"
+          className="col-start-1 row-start-1 rounded-full p-2 text-zinc-700 hover:bg-zinc-100 md:hidden"
           aria-label="Menüyü aç"
           onClick={() => setOpen(true)}
         >
           <MenuIcon />
         </button>
 
-        <Link href="/" className="flex flex-col items-center justify-self-center md:items-start md:justify-self-auto">
+        <Link
+          href="/"
+          className="col-start-2 row-start-1 flex flex-col items-center justify-self-center md:col-auto md:row-auto md:items-start md:justify-self-auto"
+        >
           <Image
             src="/rko-logo.png"
             alt={STORE.name}
@@ -206,24 +209,37 @@ export default function Header() {
             preload
             className="h-9 w-auto sm:h-11"
           />
-          <span className="font-script text-lg leading-none text-zinc-500">{STORE.tagline}</span>
+          <span className="mt-1 hidden font-script text-lg leading-snug text-zinc-500 md:block">{STORE.tagline}</span>
         </Link>
 
-        <div className="flex items-center gap-2 justify-self-end md:ml-auto md:gap-4">
+        <p className="col-start-2 row-start-2 justify-self-center pt-1 pb-3 font-script text-lg leading-snug text-zinc-500 md:hidden">
+          {STORE.tagline}
+        </p>
+
+        <div className="col-start-3 row-start-1 flex items-center gap-1 justify-self-end md:col-auto md:row-auto md:ml-auto md:gap-4">
           <SearchForm className="hidden w-80 lg:flex" />
-          <Link href="/favoriler" className="flex items-center gap-2 rounded-full p-2 text-sm text-zinc-700 hover:bg-zinc-100">
-            <span>Favorilerim</span>
+          <Link
+            href="/favoriler"
+            aria-label={favorites.length > 0 ? `Favorilerim, ${favorites.length}` : "Favorilerim"}
+            className="relative grid h-11 w-11 place-items-center rounded-full text-zinc-700 hover:bg-zinc-100 md:flex md:h-auto md:w-auto md:gap-2 md:p-2 md:text-sm"
+          >
+            <HeartIcon className="h-7 w-7 fill-none text-current md:hidden" />
+            <span className="hidden md:inline">Favorilerim</span>
             {favorites.length > 0 ? (
-              <span className="grid h-5 min-w-5 place-items-center rounded-full bg-brand px-1 text-[11px] font-semibold text-white">
+              <span className="absolute top-1 right-1 grid h-5 min-w-5 place-items-center rounded-full bg-brand px-1 text-[11px] font-semibold text-white md:static">
                 {favorites.length}
               </span>
             ) : null}
           </Link>
-          <Link href="/sepet" className="relative flex items-center gap-2 rounded-full p-2 text-sm text-zinc-700 hover:bg-zinc-100">
-            <CartIcon />
-            <span className="hidden sm:inline">Sepetim</span>
+          <Link
+            href="/sepet"
+            aria-label={count > 0 ? `Sepetim, ${count}` : "Sepetim"}
+            className="relative grid h-11 w-11 place-items-center rounded-full text-zinc-700 hover:bg-zinc-100 md:flex md:h-auto md:w-auto md:gap-2 md:p-2 md:text-sm"
+          >
+            <CartIcon className="h-7 w-7 md:h-5 md:w-5" />
+            <span className="hidden md:inline">Sepetim</span>
             {count > 0 ? (
-              <span className="absolute -top-0.5 right-0 grid h-5 min-w-5 place-items-center rounded-full bg-brand px-1 text-[11px] font-semibold text-white sm:static">
+              <span className="absolute top-1 right-1 grid h-5 min-w-5 place-items-center rounded-full bg-brand px-1 text-[11px] font-semibold text-white md:static">
                 {count}
               </span>
             ) : null}

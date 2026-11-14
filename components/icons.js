@@ -31,25 +31,32 @@ export function CloseIcon() {
   );
 }
 
-export function CartIcon() {
+export function CartIcon({ className = "h-5 w-5" }) {
   return (
-    <Svg>
-      <path d="M6 7h12l-1 11H7L6 7z" />
-      <path d="M9 7a3 3 0 0 1 6 0" />
+    <Svg className={className}>
+      <g transform="translate(0 1)">
+        <path d="M6 7h12l-1 11H7L6 7z" />
+        <path d="M9 7a3 3 0 0 1 6 0" />
+      </g>
     </Svg>
   );
 }
 
-export function HeartIcon({ filled = false }) {
+export function HeartIcon({ filled = false, className = "" }) {
+  const tone = filled ? "fill-heart text-heart" : "fill-none text-zinc-400";
+  const size = /\bh-/.test(className) ? "" : "h-5 w-5";
   return (
     <svg
       viewBox="0 0 24 24"
-      className={`h-5 w-5 ${filled ? "fill-heart text-heart" : "fill-none text-zinc-400"}`}
+      className={`${size} ${className || tone}`.trim()}
       stroke="currentColor"
       strokeWidth="1.8"
       aria-hidden="true"
     >
-      <path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4.6-7 9-7 9z" />
+      <path
+        transform="translate(0 -1.8)"
+        d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 4.6-7 9-7 9z"
+      />
     </svg>
   );
 }

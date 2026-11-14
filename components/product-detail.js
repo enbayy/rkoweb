@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { formatPrice, getCategory, productImage } from "@/lib/catalog";
+import { formatPrice, getCategory } from "@/lib/catalog";
 import { useShop } from "@/components/shop-context";
 import Breadcrumb from "@/components/breadcrumb";
 import ProductSection from "@/components/product-section";
 
 const tabs = [
   { id: "ozellikler", label: "Ürün Özellikleri" },
-  { id: "yorumlar", label: "Yorumlar" },
   { id: "odeme", label: "Ödeme Seçenekleri" },
   { id: "iade", label: "İade Koşulları" },
 ];
@@ -21,9 +20,6 @@ export default function ProductDetail({ product, related }) {
   const [quantity, setQuantity] = useState(1);
   const [tab, setTab] = useState("ozellikler");
   const [added, setAdded] = useState(false);
-  const [reviews, setReviews] = useState([]);
-  const [reviewName, setReviewName] = useState("");
-  const [reviewText, setReviewText] = useState("");
   const slides = product.images?.length ? product.images : [product.image];
   const soldOut = product.stock === 0;
 
@@ -37,33 +33,19 @@ export default function ProductDetail({ product, related }) {
     setAdded(true);
   }
 
-  function addReview(event) {
-    event.preventDefault();
-    setReviews((current) => [{ name: reviewName.trim(), text: reviewText.trim() }, ...current]);
-    setReviewName("");
-    setReviewText("");
-  }
-
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
       <Breadcrumb
         items={[
           { href: "/", label: "Ana Sayfa" },
           { href: `/kategori/${category.slug}`, label: category.name },
-          { label: product.name },
         ]}
       />
 
       <div className="mt-6 grid items-start gap-8 lg:grid-cols-2">
         <div>
           <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-white">
-            <img
-              src={slides[slide]}
-              srcSet={`${productImage(slides[slide], 800)} 800w, ${slides[slide]} 1200w`}
-              sizes="(min-width: 1024px) 560px, 100vw"
-              alt={product.name}
-              className="h-full w-full object-contain"
-            />
+            <img src={slides[slide]} alt={product.name} className="h-full w-full object-contain" />
             {slides.length > 1 ? (
               <>
                 <button
@@ -186,40 +168,6 @@ export default function ProductDetail({ product, related }) {
                 <li key={feature}>{feature}</li>
               ))}
             </ul>
-          ) : null}
-
-          {tab === "yorumlar" ? (
-            <div className="space-y-4">
-              {reviews.length === 0 ? <p>Henüz yorum yok.</p> : null}
-              {reviews.map((review) => (
-                <article key={`${review.name}-${review.text}`} className="rounded-xl bg-zinc-50 px-4 py-3">
-                  <p className="font-medium text-zinc-800">{review.name}</p>
-                  <p className="mt-1">{review.text}</p>
-                </article>
-              ))}
-              <form onSubmit={addReview} className="grid gap-3 sm:max-w-md">
-                <input
-                  required
-                  value={reviewName}
-                  onChange={(event) => setReviewName(event.target.value)}
-                  placeholder="Adınız"
-                  aria-label="Adınız"
-                  className="h-11 rounded-lg border border-zinc-200 px-3 outline-none focus:border-brand"
-                />
-                <textarea
-                  required
-                  value={reviewText}
-                  onChange={(event) => setReviewText(event.target.value)}
-                  placeholder="Yorumunuz"
-                  aria-label="Yorumunuz"
-                  rows={3}
-                  className="rounded-lg border border-zinc-200 px-3 py-2 outline-none focus:border-brand"
-                />
-                <button type="submit" className="h-11 rounded-lg bg-zinc-800 text-white">
-                  Yorumu göster
-                </button>
-              </form>
-            </div>
           ) : null}
 
           {tab === "odeme" ? (

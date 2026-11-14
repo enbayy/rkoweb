@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { formatPrice, productImage } from "@/lib/catalog";
+import { formatPrice } from "@/lib/catalog";
 import { useShop } from "@/components/shop-context";
 import { HeartIcon } from "@/components/icons";
 
@@ -24,8 +24,6 @@ export default function ProductCard({ product }) {
         <div className="relative flex aspect-[3/4] items-center justify-center overflow-hidden rounded-xl bg-white">
           <img
             src={product.image}
-            srcSet={`${productImage(product.image, 800)} 800w, ${product.image} 1200w`}
-            sizes="(min-width: 1024px) 280px, 45vw"
             alt={product.name}
             className="h-full w-full object-contain"
           />

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getInfoPage, infoPages } from "@/lib/catalog";
 
@@ -11,7 +12,15 @@ export async function generateMetadata({ params }) {
   return { title: page ? page.title : "Bilgi" };
 }
 
-export default async function InfoPage({ params }) {
+export default function InfoPage({ params }) {
+  return (
+    <Suspense fallback={<InfoFallback />}>
+      <InfoContent params={params} />
+    </Suspense>
+  );
+}
+
+async function InfoContent({ params }) {
   const { slug } = await params;
   const page = getInfoPage(slug);
   if (!page) notFound();
@@ -25,5 +34,18 @@ export default async function InfoPage({ params }) {
         ))}
       </div>
     </article>
+  );
+}
+
+function InfoFallback() {
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-10" aria-busy="true" aria-live="polite">
+      <div className="h-8 w-64 rounded bg-zinc-200" />
+      <div className="mt-5 space-y-3 rounded-2xl bg-white p-6">
+        <div className="h-4 rounded bg-zinc-100" />
+        <div className="h-4 rounded bg-zinc-100" />
+        <div className="h-4 w-2/3 rounded bg-zinc-100" />
+      </div>
+    </div>
   );
 }
