@@ -17,11 +17,9 @@ export default function ProductSection({ title, products, href }) {
           </Link>
         ) : null}
       </div>
-      <div className="no-scrollbar flex snap-x gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:overflow-visible lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => (
-          <div key={product.slug} className="w-[72%] shrink-0 snap-start sm:w-[46%] md:w-auto md:shrink">
-            <ProductCard product={product} />
-          </div>
+          <ProductCard key={product.slug} product={product} />
         ))}
       </div>
     </section>
